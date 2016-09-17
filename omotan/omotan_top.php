@@ -72,8 +72,8 @@ a:visited { color :black; }
 </style>
         <link rel="stylesheet" type="text/css" href="omotan.css">
         <link rel="shortcut icon" href=”favicon.ico”>
-
-
+ 
+        
     </head>
 
     <body>
@@ -87,10 +87,11 @@ a:visited { color :black; }
             <span id="heading05" align="center"><font size="7">omotan</font></span>
             <span>
                 <a class="btn_i" type="button" onclick="location.href = 'omotan_top.php'"> TOP </a>
-                <span style="margin-right: 10px;"></span>
+<!--                <span style="margin-right: 10px;"></span>
                 <a class="btn_i" type="button" onclick="location.href = 'error.php'"> 通知 </a>
                 <span style="margin-right: 10px;"></span>
                 <a class="btn_i" type="button" onclick="location.href = 'error.php'"> メッセージ </a>
+-->
             </span>
         </div>
         <!-- トップ画：ここまで -->
@@ -102,7 +103,7 @@ a:visited { color :black; }
 
         <?php
 // --- ログインフォーム --------------------
-        if (empty($_SESSION[userid])) {
+        if (empty($_SESSION["userid"])) {
 
             echo '<div>';
             echo '<form action="omotan_login.php" method="POST">';
@@ -114,9 +115,16 @@ a:visited { color :black; }
             echo '</div>';
         } else {
             echo '<div>';
+            $image_path = './profile_img' . $_SESSION["userid"] . ".jpg";
+/*
+if (file_exists($image_path)) {
+    header('Content-Type: image/jpeg');
+    // fileread から readfile に訂正
+}*/
+            echo 'readfile($image_path)';
+            
             echo "こんにちは</br>" . $_SESSION["username"] . 'さん <br><br>';
             //マイページ
-//            echo '<a href="omotan_mypage.php">マイページ</a></br>';
 
             echo '<form name=mypage action="omotan_mypage.php" method="GET" style="display:inline;">';
             echo '<input type="hidden" name="username" value="' . $_SESSION["username"] . '">';
@@ -141,7 +149,7 @@ a:visited { color :black; }
         <?php
         //つぶやき画面表示 ここから
 
-        if (empty($_SESSION[userid])) {
+        if (empty($_SESSION["userid"])) {
             
         } else {
             echo '<div class="tweet">';
@@ -155,7 +163,6 @@ a:visited { color :black; }
         }
 
         //つぶやき画面表示 ここまで
-//        echo '<div class="title">新着omotan</div>';
 
 
         // 新着tweet：ここから
@@ -189,9 +196,10 @@ a:visited { color :black; }
                 echo '<span id="time">' . substr($dataset["created_at"],0,10) . "</span><br>";
                 echo '<FONT size=4>' . $dataset["tweet"] . "</FONT></br>";
 
+                if(!empty($_SESSION["userid"])){//ログアウトしているユーザーには出さないようにする。
                 //いいね！
                 $iine = $dbh->prepare(
-                        "SELECT count(*) AS fnum FROM favorite"
+                        "SELECT count(*) AS fnum FROM favorite"                        
                         . " WHERE user_id = " . $_SESSION["userid"]
                         . " and favorite_tweet_id = " . $tweetid[$i - 1]
                         . " and deleted_at is null"
@@ -238,11 +246,13 @@ a:visited { color :black; }
                     echo '&nbsp;&nbsp;&nbsp;';
                     echo '</form>';
                 }
-
+            }
                 echo '<hr size="3" align="left" color="#EEEEEE">';
+
             } else {
                 
             }
+            
         }
 
         //新着tweet：ここまで

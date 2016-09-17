@@ -26,7 +26,7 @@ require 'secret/secret.php';
             , $password, array(PDO::ATTR_PERSISTENT => true));
 
 
-    /*
+    
       // 既存のテーブルを削除する
 
       $db->query("DROP TABLE tweets");
@@ -60,6 +60,7 @@ require 'secret/secret.php';
       "user_password text, ".
       "user_question text, ".
       "user_answer text, ".
+      "user_profile text, ".              
       "user_lastlogin timestamp, ".
       "created_at timestamp not null default current_timestamp, ".
       "updated_at timestamp not null default current_timestamp on update current_timestamp, ".
@@ -86,7 +87,7 @@ require 'secret/secret.php';
 
       // テーブルを作成
       $db->query($sql);
-     */
+     
 
 
     // 既存のfavoriteテーブルを削除する

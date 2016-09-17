@@ -35,12 +35,13 @@ if ($_POST["mode"] == "login" && $query->rowCount() > 0 && $_POST["password"] ==
             // 新規登録：クエリ実行結果が0行＝既存ユーザー名と一致しない
             if ($query->rowCount() == 0) {
                 echo '新規ユーザー登録<br>';
-                echo '<form action="omotan_login.php" method="POST">';
+                echo '<form action="omotan_login.php" method="POST" enctype="multipart/form-data">';
                 echo 'ユーザー名 <input type="text" name="username" value="' . $_POST["username"] . '"><br>';
                 echo 'パスワード <input type="password" name="password"><br>';
                 echo 'パスワード(確認) <input type="password" name="confirm"><br>';
                 echo 'ひみつの質問 <input type="text" name="question"><br>';
                 echo 'その答え <input type="text" name="answer"><br>';
+                echo 'プロフィール画像 <input type="file" name="profile"><br>';
                 echo '<input type="hidden" name="mode" value="register">';
                 echo '<input type="submit" value="登録">';
                 echo '</form>';
@@ -86,40 +87,56 @@ if ($_POST["mode"] == "login" && $query->rowCount() > 0 && $_POST["password"] ==
                 $user_id_query = $db->query($sql);
                 $user_id = $user_id_query->rowCount();
 
-//登録クエリの実行
 
-                $sql = "INSERT INTO users (id,user_id,user_name, user_password, user_question, user_answer) VALUES ("
-                        . "$user_id+1"
-                        . ',' . "$user_id+1"
-                        . ',"' . $_POST["username"] . '"'
-                        . ',"' . $_POST["password"] . '"'
-                        . ',"' . $_POST["question"] . '"'
-                        . ',"' . $_POST["answer"] . '"' . ')';
-                $db->query($sql);
+                //画像ファイルのエラーチェック&サーバーアップロード
+                $upload_dir = "./profile_img/";
+                try {
+                    if (is_uploaded_file($_FILES['profile']['tmp_name'])) {
+                        move_uploaded_file($_FILES['profile']['tmp_name'], $upload_dir . "$user_id+1" . ".jpg" );
+                        print_r($_FILES['profile']['tmp_name']);
+//                        print_r($_FILES['file']);
+                    }
+                } catch (Exception $e) {
+                    echo '画像エラー:', $e->getMessage() . PHP_EOL;
+                }
+               
 
-                echo '登録しました。</br>';
-                echo '<a href="omotan_top.php">トップページへ</a>';
-            } else {
-                echo 'パスワードを再確認してください。';
-                echo '<a href="javascript:history.go(-1);">戻る</a>';
-            }
-        }
-        // ■■　パスワード変更状態
-        elseif ($_POST["mode"] == "modifypassword") {
-            if ($_POST["password"] == $_POST["confirm"]) {
+        //登録クエリの実行
 
-                $sql = "UPDATE users "
-                        . " SET user_password = '" . $_POST["password"] . "'"
-                        . " WHERE user_name = '" . $_POST["username"] . "'";
-                $db->query($sql);
+        $sql = "INSERT INTO users (id,user_id,user_name, user_password, user_question, user_answer,user_profile) VALUES ("
+        . "$user_id+1"
+        . ',' . "$user_id+1"
+        . ',"' . $_POST["username"] . '"'
+        . ',"' . $_POST["password"] . '"'
+        . ',"' . $_POST["question"] . '"'
+        . ',"' . $_POST["answer"] . '"' 
+        . ',"' . "$user_id+1" . 'jpg"'                         
+        . ')';
+        $db->query($sql);
 
-                echo '登録しました。</br>';
-                echo '<a href="omotan_top.php">トップページへ</a>';
-            } else {
-                echo 'パスワードを再確認してください。';
-                echo '<a href="javascript:history.go(-1);">戻る</a>';
-            }
-        }
-        ?>
-    </body>
+        echo '登録しました。</br>';
+        echo '<a href="omotan_top.php">トップページへ</a>';
+    } else {
+    echo 'パスワードを再確認してください。';
+    echo '<a href="javascript:history.go(-1);">戻る</a>';
+    }
+    }
+    // ■■　パスワード変更状態
+    elseif ($_POST["mode"] == "modifypassword") {
+    if ($_POST["password"] == $_POST["confirm"]) {
+
+    $sql = "UPDATE users "
+    . " SET user_password = '" . $_POST["password"] . "'"
+    . " WHERE user_name = '" . $_POST["username"] . "'";
+    $db->query($sql);
+
+    echo '登録しました。</br>';
+    echo '<a href="omotan_top.php">トップページへ</a>';
+    } else {
+    echo 'パスワードを再確認してください。';
+    echo '<a href="javascript:history.go(-1);">戻る</a>';
+    }
+    }
+    ?>
+</body>
 </html>
