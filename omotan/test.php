@@ -1,29 +1,23 @@
 <?php
-/*
-  $upload_dir = "./profile_img/";
-  try {
-  if (is_uploaded_file($_FILES['profile']['tmp_name'])) {
-  move_uploaded_file($_FILES['profile']['tmp_name'],
-  $upload_dir . "$user_id+1" . ".jpg" );
-  print_r($_FILES["profile"]["error"]);
-  //                        print_r($_FILES['file']);
-  }
-  } catch (Exception $e) {
-  echo '画像エラー:', $e->getMessage() . PHP_EOL;
-  }
- */
+//エラー詳細表示
+//ini_set("display_errors", 1);
+//error_reporting(E_ALL);
 
-//                $uploads_dir = './profile_img';
-//$uploads_dir = '/Library/WebServer/Documents/php/omotan/';
-$uploads_dir = '/Users/hosoyasatoshi/Desktop/old/';
-        $tmp_name = $_FILES["profile"]["tmp_name"];
-        // basename() で、ひとまずファイルシステムトラバーサル攻撃は防げるでしょう。
-        // ファイル名についてのその他のバリデーションも、適切に行いましょう。
-        $name = basename($_FILES["profile"]["name"]);
-        move_uploaded_file($tmp_name, "$uploads_dir". "$name");
+$uploads_dir = './profile_img';
 
-$tmp_name1 = $_FILES["profile"]["tmp_name"];
-echo $tmp_name1."</br>";
+$tmp_name = $_FILES["profile"]["tmp_name"];
+
+// basename() で、ひとまずファイルシステムトラバーサル攻撃は防げるでしょう。
+// ファイル名についてのその他のバリデーションも、適切に行いましょう。
+$name = basename($_FILES["profile"]["name"]);
+
+//uploadする先のディレクトリに、外部からの書き込み権限を付与しておく(sudo chmod 777 ****)
+if (move_uploaded_file($tmp_name, $uploads_dir . "/test1ww1.jpg")) {
+    
+} else {
+    echo $uploads_dir . ":失敗";
+    print_r($_FILES);
+}
 ?>
 
 

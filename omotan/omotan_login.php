@@ -86,57 +86,82 @@ if ($_POST["mode"] == "login" && $query->rowCount() > 0 && $_POST["password"] ==
                 $sql = "select * from users;";
                 $user_id_query = $db->query($sql);
                 $user_id = $user_id_query->rowCount();
+                $user_id_1 = $user_id + 1;
 
 
                 //画像ファイルのエラーチェック&サーバーアップロード
                 $upload_dir = "./profile_img/";
                 try {
                     if (is_uploaded_file($_FILES['profile']['tmp_name'])) {
-                        move_uploaded_file($_FILES['profile']['tmp_name'], $upload_dir . "$user_id+1" . ".jpg" );
-                        print_r($_FILES['profile']['tmp_name']);
-//                        print_r($_FILES['file']);
+  //uploadする先のディレクトリに、外部からの書き込み権限を付与しておく(sudo chmod 777 ****)
+                        move_uploaded_file($_FILES['profile']['tmp_name'], $upload_dir . $user_id_1 . ".jpg");
                     }
                 } catch (Exception $e) {
                     echo '画像エラー:', $e->getMessage() . PHP_EOL;
                 }
-               
 
-        //登録クエリの実行
 
-        $sql = "INSERT INTO users (id,user_id,user_name, user_password, user_question, user_answer,user_profile) VALUES ("
-        . "$user_id+1"
-        . ',' . "$user_id+1"
-        . ',"' . $_POST["username"] . '"'
-        . ',"' . $_POST["password"] . '"'
-        . ',"' . $_POST["question"] . '"'
-        . ',"' . $_POST["answer"] . '"' 
-        . ',"' . "$user_id+1" . 'jpg"'                         
-        . ')';
-        $db->query($sql);
+                //登録クエリの実行
 
-        echo '登録しました。</br>';
-        echo '<a href="omotan_top.php">トップページへ</a>';
-    } else {
-    echo 'パスワードを再確認してください。';
-    echo '<a href="javascript:history.go(-1);">戻る</a>';
-    }
-    }
-    // ■■　パスワード変更状態
-    elseif ($_POST["mode"] == "modifypassword") {
-    if ($_POST["password"] == $_POST["confirm"]) {
+                $sql = "INSERT INTO users (id,user_id,user_name, user_password, user_question, user_answer,user_profile) VALUES ("
+                        . "$user_id+1"
+                        . ',' . "$user_id+1"
+                        . ',"' . $_POST["username"] . '"'
+                        . ',"' . $_POST["password"] . '"'
+                        . ',"' . $_POST["question"] . '"'
+                        . ',"' . $_POST["answer"] . '"'
+                        . ',"' . $user_id_1 . '.jpg"'
+                        . ')';
+                $db->query($sql);
 
-    $sql = "UPDATE users "
-    . " SET user_password = '" . $_POST["password"] . "'"
-    . " WHERE user_name = '" . $_POST["username"] . "'";
-    $db->query($sql);
+                /*
+                //画像のアップロード
+                $uploads_dir = './profile_img';
+                $tmp_name = $_FILES["profile"]["tmp_name"];
 
-    echo '登録しました。</br>';
-    echo '<a href="omotan_top.php">トップページへ</a>';
-    } else {
-    echo 'パスワードを再確認してください。';
-    echo '<a href="javascript:history.go(-1);">戻る</a>';
-    }
-    }
-    ?>
-</body>
+// basename() で、ひとまずファイルシステムトラバーサル攻撃は防げるでしょう。
+// ファイル名についてのその他のバリデーションも、適切に行いましょう。
+                $name = basename($_FILES["profile"]["name"]);
+
+//uploadする先のディレクトリに、外部からの書き込み権限を付与しておく(sudo chmod 777 ****)
+                if (move_uploaded_file($tmp_name, $uploads_dir . "/test1ww1.jpg")) {
+                    
+                } else {
+                    echo $uploads_dir . ":画像アップロード失敗";
+                    print_r($_FILES);
+                }
+*/
+
+
+
+
+                echo '登録しました。</br>';
+                echo '<a href="omotan_top.php">トップページへ</a>';
+            } else {
+                echo 'パスワードを再確認してください。';
+                echo '<a href="javascript:history.go(-1);">戻る</a>';
+            }
+        }
+        // ■■　パスワード変更状態
+        elseif ($_POST["mode"] == "modifypassword") {
+            if ($_POST["password"] == $_POST["confirm"]) {
+
+                $sql = "UPDATE users "
+                        . " SET user_password = '" . $_POST["password"] . "'"
+                        . " WHERE user_name = '" . $_POST["username"] . "'";
+                $db->query($sql);
+
+                echo '登録しました。</br>';
+                echo '<a href="omotan_top.php">トップページへ</a>';
+            } else {
+                echo 'パスワードを再確認してください。';
+                echo '<a href="javascript:history.go(-1);">戻る</a>';
+            }
+        }
+        else{
+            echo "最終エラー";
+            echo '<a href="omotan_top.php">トップページへ</a>';
+        }
+        ?>
+    </body>
 </html>

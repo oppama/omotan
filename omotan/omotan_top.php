@@ -121,7 +121,7 @@ if (file_exists($image_path)) {
     header('Content-Type: image/jpeg');
     // fileread から readfile に訂正
 }*/
-            echo 'readfile($image_path)';
+            echo 'readfile(./profile_img/'.$_SESSION["userid"].'.jpg)';
             
             echo "こんにちは</br>" . $_SESSION["username"] . 'さん <br><br>';
             //マイページ
