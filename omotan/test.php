@@ -1,29 +1,23 @@
 <?php
-//エラー詳細表示
-//ini_set("display_errors", 1);
-//error_reporting(E_ALL);
+/*$image_path = './profile_img/';
 
-$uploads_dir = './profile_img';
+if (file_exists($image_path)) {
+//header('Content-Type: image/jpeg');
+//echo 'readfile(' . $image_path . $_SESSION["userid"] . '.jpg)';
+echo 'aaa';
 
-$tmp_name = $_FILES["profile"]["tmp_name"];
+}
+ */
 
-// basename() で、ひとまずファイルシステムトラバーサル攻撃は防げるでしょう。
-// ファイル名についてのその他のバリデーションも、適切に行いましょう。
-$name = basename($_FILES["profile"]["name"]);
 
-//uploadする先のディレクトリに、外部からの書き込み権限を付与しておく(sudo chmod 777 ****)
-if (move_uploaded_file($tmp_name, $uploads_dir . "/test1ww1.jpg")) {
-    
-} else {
-    echo $uploads_dir . ":失敗";
-    print_r($_FILES);
+$image_path = './profile_img/1.jpg';
+if (file_exists($image_path)) {
+    $fp   = fopen($image_path,'rb');
+    $size = filesize($image_path);
+    $img  = fread($fp, $size);
+    fclose($fp);
+
+    header('Content-Type: image/jpeg');
+    echo $img;
 }
 ?>
-
-
-
-
-<form action="./test.php" method="POST" enctype="multipart/form-data">
-    <input type="file" name="profile">
-    <input type="submit" value="ファイルをアップロードする">
-</form>
