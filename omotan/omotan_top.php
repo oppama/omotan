@@ -84,16 +84,18 @@ else {
                 <!-- 画像表示 -->
         <div class="top">
             <span id="heading05" align="center"><font size="7">omotan</font></span>
+            
                 <!-- トップへのリンク表示 -->
             <span>
                 <a class="btn_i" type="button" onclick="location.href = 'omotan_top.php'"> TOP </a>
             </span>
                <span style="margin-right: 500px;"></span>
+               
                 <!-- 検索窓表示 -->
             <span>
                     <form action="omotan_search.php" method="POST" style="display:inline" >
-                    <input type="text" name="search" placeholder="検索ワード">
-                    <input type="hidden" name="add_check" value=1>
+                    <input type="text" name="search_word" placeholder="検索ワード">
+                    <input type="hidden" name="search_check" value=1>
                     <input type="submit" value="検索">
                 </form>
             </span>
@@ -122,7 +124,7 @@ else {
             } else {
                 echo '<div>';
 
-                //自画像表示
+                //自画像表示作業用
                 /*                $image_path = './profile_img/' . $_SESSION["userid"] . ".jpg";
                   if (file_exists($image_path)) {
                   $fp = fopen($image_path, 'rb');
