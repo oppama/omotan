@@ -46,23 +46,25 @@ if (!empty($_SESSION["userid"]) && !empty($_POST["search_check"]) && !empty($_PO
     $search_user->execute();
 
     //結果を配列に格納
-    $search_result_user = Array(10);
+    $search_result_user = Array();
     for ($i = 0; $i < $s_num; $i++) {
         unset($resule);
         $result = $search_user->fetch(PDO::FETCH_ASSOC);
-        print_r($result);
-        $search_result_user[$i+1]["user_id"] = $result["user_id"];
-        $search_result_user[$i+1]["user_name"] = $result["user_name"];
-        
-         }
-         
-         print_r($search_result_user);         
-         
+        //検索結果のユーザー情報を格納
+        if (isset($result["user_id"])) {
+            $search_result_user[$i]["user_id"] = $result["user_id"];
+            $search_result_user[$i]["user_name"] = $result["user_name"];
+            $search_result_user[$i]["user_profile"] = $result["user_profile"];
+        }
+    }
+
+
     //結果をセッション変数に格納
     $_SESSION["search_result_user"] = $search_result_user;
 
 
-  /*  
+
+
     //検索条件に当てはまったtweetを抽出
 
     $search_tweet = $dbh->prepare(
@@ -71,25 +73,31 @@ if (!empty($_SESSION["userid"]) && !empty($_POST["search_check"]) && !empty($_PO
             . " and deleted_at is null"
             . " order by tweet_id "
             . " limit " . $s_num
-            . ";"
     );
 
     $search_tweet->execute();
-    $search_result_tweet = $search_tweet->fetch(PDO::FETCH_ASSOC);
 
     //結果を配列に格納
-    $search_result_tweet = Array(10);
+    $search_result_tweet = Array();
     for ($i = 0; $i < $s_num; $i++) {
-        $search_result_tweet[i] = $search_tweet->fetch(PDO::FETCH_ASSOC);
+        unset($resule);
+        $result = $search_tweet->fetch(PDO::FETCH_ASSOC);
+        //検索結果のユーザー情報を格納
+        if (isset($result["user_id"])) {
+            $search_result_tweet[$i]["user_id"] = $result["user_id"];
+            $search_result_tweet[$i]["user_name"] = $result["user_name"];
+            $search_result_tweet[$i]["tweet"] = $result["tweet"];
+            $search_result_tweet[$i]["favorite"] = $result["favorite"];
+        }
     }
 
     //結果をセッション変数に格納
     $_SESSION["search_result_tweet"] = $search_result_tweet;
-*/
 
-//    header("Location: omotan_top.php");
-//    header("Location: test.php");
+
+//    header("Location: top.php");
+    header("Location: test.php");
 } else {
-    header("Location: omotan_top.php");
+    header("Location: top.php");
 }
 ?>

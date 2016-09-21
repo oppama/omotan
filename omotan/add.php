@@ -40,7 +40,7 @@ require 'secret/secret.php';
       } catch (Exception $e) {
           $dbh->rollBack();
       }
-header("Location: omotan_top.php");
+header("Location: top.php");
       
       
       

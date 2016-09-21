@@ -87,13 +87,13 @@ else {
             
                 <!-- トップへのリンク表示 -->
             <span>
-                <a class="btn_i" type="button" onclick="location.href = 'omotan_top.php'"> TOP </a>
+                <a class="btn_i" type="button" onclick="location.href = 'top.php'"> TOP </a>
             </span>
                <span style="margin-right: 500px;"></span>
                
                 <!-- 検索窓表示 -->
             <span>
-                    <form action="omotan_search.php" method="POST" style="display:inline" >
+                    <form action="search_logic.php" method="POST" style="display:inline" >
                     <input type="text" name="search_word" placeholder="検索ワード">
                     <input type="hidden" name="search_check" value=1>
                     <input type="submit" value="検索">
@@ -114,7 +114,7 @@ else {
             if (empty($_SESSION["userid"])) {
 
                 echo '<div>';
-                echo '<form action="omotan_login.php" method="POST">';
+                echo '<form action="login.php" method="POST">';
                 echo 'ログイン名 <input type="text" name="username" size="8"><br>';
                 echo 'パスワード <input type="password" name="password" size="8"><br>';
                 echo '<input type="hidden" name="mode" value="login">';
@@ -142,14 +142,14 @@ else {
                 echo $_SESSION["username"] . '<br><br>';
                 //マイページ
 
-                echo '<form name=mypage action="omotan_mypage.php" method="GET" style="display:inline;">';
+                echo '<form name=mypage action="mypage.php" method="GET" style="display:inline;">';
                 echo '<input type="hidden" name="username" value="' . $_SESSION["username"] . '">';
                 echo '<a href="javascript:void(0)" onclick="document.mypage.submit();">マイページ</a>';
                 echo '</form>';
                 echo '</br>';
 
                 //ログアウト
-                echo '<a href="omotan_top.php?mode=logout">ログアウト</a>';
+                echo '<a href="top.php?mode=logout">ログアウト</a>';
                 echo '</div>';
             }
             ?>
@@ -169,7 +169,7 @@ else {
                 
             } else {
                 echo '<div class="tweet">';
-                echo '<form action="omotan_add.php" method="POST">';
+                echo '<form action="add.php" method="POST">';
                 echo '<input type="text" name="tweet" placeholder="例:ピスタチオ"><br>';
                 echo '<input type="hidden" name="add_check" value=1>';
                 echo '<input type="submit" value="omotan">';
@@ -203,10 +203,10 @@ else {
                     //tweet主のリンク先の作成
                     //画像のリンク                        
 
-                    echo '<form name=img_tweetuser' . $i . ' action="omotan_mypage.php" method="GET" style="display:inline">';
+                    echo '<form name=img_tweetuser' . $i . ' action="mypage.php" method="GET" style="display:inline">';
                     echo '<input type="hidden" name="username" value="' . $dataset["user_name"] . '">';
 //                        echo '<a href="javascript:void(0)" onclick="document.img_tweetuser' . $i . '.submit();" style="text-decoration:none;"><FONT size=2><B>' . $dataset["user_name"] . '</B></FONT></a>';                        
-                    echo '<a href="omotan_mypage.php" >';
+                    echo '<a href="mypage.php" >';
                     echo '<img src="./profile_img/' . $dataset["user_id"] . '.jpg"'
                     . ' style="width:5%;height:5%;">';
                     echo '<span style="margin-right: 15px;"></span>';
@@ -214,7 +214,7 @@ else {
                     echo '</form>';
 //        echo '<span style="margin-right: 6px;"></span>';
                     //ユーザー名のリンク                        
-                    echo '<form name=name_tweetuser' . $i . ' action="omotan_mypage.php" method="GET" style="display:inline;">';
+                    echo '<form name=name_tweetuser' . $i . ' action="mypage.php" method="GET" style="display:inline;">';
                     echo '<input type="hidden" name="username" value="' . $dataset["user_name"] . '">';
                     echo '<a href="javascript:void(0)" onclick="document.name_tweetuser' . $i . '.submit();" style="text-decoration:none;"><FONT size=2><B>' . $dataset["user_name"] . '</B></FONT></a>';
                     echo '</form>';
@@ -237,7 +237,7 @@ else {
                         $result = $iine->fetch(PDO::FETCH_ASSOC);
 
                         if ($result["fnum"] > 0) {
-                            echo '<form name=iine' . $i . ' action="omotan_edit.php" method="POST"  style="display:inline;">';
+                            echo '<form name=iine' . $i . ' action="edit.php" method="POST"  style="display:inline;">';
                             echo '<a id=iine' . $i . '></a>';
                             echo '<input type="hidden" name="userid" value=' . $_SESSION["userid"] . '>';
                             echo '<input type="hidden" name="tweetid" value=' . $tweetid[$i - 1] . '>';
@@ -249,7 +249,7 @@ else {
                             echo '&nbsp;&nbsp;&nbsp;';
                             echo '</form>';
                         } else {
-                            echo '<form name=iine' . $i . ' action="omotan_edit.php" method="POST"  style="display:inline;">';
+                            echo '<form name=iine' . $i . ' action="edit.php" method="POST"  style="display:inline;">';
                             echo '<a id=iine' . $i . '></a>';
                             echo '<input type="hidden" name="userid" value=' . $_SESSION["userid"] . '>';
                             echo '<input type="hidden" name="tweetid" value=' . $tweetid[$i - 1] . '>';
@@ -264,7 +264,7 @@ else {
 
 //つぶやき主のみ削除ボタンを表示
                         if ($_SESSION["userid"] == $dataset["user_id"]) {
-                            echo '<form name=del' . $i . ' action="omotan_edit.php" method="POST" onSubmit="return check()"  style="display:inline;">';
+                            echo '<form name=del' . $i . ' action="edit.php" method="POST" onSubmit="return check()"  style="display:inline;">';
                             echo '<a id=del' . $i . '></a>';
                             echo '<input type="hidden" name="userid" value=' . $_SESSION["userid"] . '>';
                             echo '<input type="hidden" name="tweetid" value=' . $tweetid[$i - 1] . '>';

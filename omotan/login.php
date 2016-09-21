@@ -18,7 +18,7 @@ $record = $query->fetch(PDO::FETCH_ASSOC);
 // 認証OK?
 if ($_POST["mode"] == "login" && $query->rowCount() > 0 && $_POST["password"] == $record["user_password"]) {
     $_SESSION["userid"] = $record["user_id"];
-    header("Location: omotan_top.php");
+    header("Location: top.php");
 }
 ?>
 
@@ -35,7 +35,7 @@ if ($_POST["mode"] == "login" && $query->rowCount() > 0 && $_POST["password"] ==
             // 新規登録：クエリ実行結果が0行＝既存ユーザー名と一致しない
             if ($query->rowCount() == 0) {
                 echo '新規ユーザー登録<br>';
-                echo '<form action="omotan_login.php" method="POST" enctype="multipart/form-data">';
+                echo '<form action="login.php" method="POST" enctype="multipart/form-data">';
                 echo 'ユーザー名 <input type="text" name="username" value="' . $_POST["username"] . '"><br>';
                 echo 'パスワード <input type="password" name="password"><br>';
                 echo 'パスワード(確認) <input type="password" name="confirm"><br>';
@@ -52,7 +52,7 @@ if ($_POST["mode"] == "login" && $query->rowCount() > 0 && $_POST["password"] ==
             elseif ($_POST["password"] != $record["user_password"]) {
                 echo 'パスワードが違います。<br>';
                 echo 'ひみつの質問に答えると、パスワードを変更できます。<br>';
-                echo '<form action="omotan_login.php" method="POST">';
+                echo '<form action="login.php" method="POST">';
                 echo 'ひみつの質問 ' . $record["user_question"] . '<br>';
                 echo 'その答え <input type="text" name="answer"><br>';
                 echo '<input type="hidden" name="username" value="' . $username . '">';
@@ -67,7 +67,7 @@ if ($_POST["mode"] == "login" && $query->rowCount() > 0 && $_POST["password"] ==
         elseif ($_POST["mode"] == "resetpassword") {
             if ($record["user_answer"] == $_POST["answer"]) {
                 echo 'パスワード再設定<br>';
-                echo '<form action="omotan_login.php" method="POST">';
+                echo '<form action="login.php" method="POST">';
                 echo 'パスワード <input type="password" name="password"><br>';
                 echo 'パスワード(確認) <input type="password" name="confirm"><br>';
                 echo '<input type="hidden" name="username" value="' . $username . '">';
@@ -136,7 +136,7 @@ if ($_POST["mode"] == "login" && $query->rowCount() > 0 && $_POST["password"] ==
 
 
                 echo '登録しました。</br>';
-                echo '<a href="omotan_top.php">トップページへ</a>';
+                echo '<a href="top.php">トップページへ</a>';
             } else {
                 echo 'パスワードを再確認してください。';
                 echo '<a href="javascript:history.go(-1);">戻る</a>';
@@ -152,7 +152,7 @@ if ($_POST["mode"] == "login" && $query->rowCount() > 0 && $_POST["password"] ==
                 $db->query($sql);
 
                 echo '登録しました。</br>';
-                echo '<a href="omotan_top.php">トップページへ</a>';
+                echo '<a href="top.php">トップページへ</a>';
             } else {
                 echo 'パスワードを再確認してください。';
                 echo '<a href="javascript:history.go(-1);">戻る</a>';
@@ -160,7 +160,7 @@ if ($_POST["mode"] == "login" && $query->rowCount() > 0 && $_POST["password"] ==
         }
         else{
             echo "最終エラー";
-            echo '<a href="omotan_top.php">トップページへ</a>';
+            echo '<a href="top.php">トップページへ</a>';
         }
         ?>
     </body>
