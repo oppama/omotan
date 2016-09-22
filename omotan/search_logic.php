@@ -84,10 +84,12 @@ if (!empty($_SESSION["userid"]) && !empty($_POST["search_check"]) && !empty($_PO
         $result = $search_tweet->fetch(PDO::FETCH_ASSOC);
         //検索結果のユーザー情報を格納
         if (isset($result["user_id"])) {
+            $search_result_tweet[$i]["tweet_id"] = $result["tweet_id"];
             $search_result_tweet[$i]["user_id"] = $result["user_id"];
             $search_result_tweet[$i]["user_name"] = $result["user_name"];
             $search_result_tweet[$i]["tweet"] = $result["tweet"];
             $search_result_tweet[$i]["favorite"] = $result["favorite"];
+            $search_result_tweet[$i]["created_at"] = $result["created_at"];
         }
     }
 

@@ -193,9 +193,9 @@ else {
             $sth->execute();
 
 //削除・いいね用の配列を用意
-            $tweetid = array($h);
+            $tweetid = array();
 
-            for ($i = 1; $i <= 10; $i++) {
+            for ($i = 1; $i <= $h; $i++) {
                 $dataset = $sth->fetch(PDO::FETCH_ASSOC);
                 $tweetid[$i - 1] = $dataset["tweet_id"];
 

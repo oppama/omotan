@@ -3,7 +3,6 @@
         session_start();
         if ( !empty($_SESSION["userid"]) && !empty($_POST["add_check"]) ) {
                 $tweet	= $_POST["tweet"];
-
                 
 //パス情報読み込み
 require 'secret/secret.php';

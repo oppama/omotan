@@ -30,11 +30,18 @@ if (!empty($_SESSION["userid"]) && !empty($_POST["tweetid"]) && !empty($_POST["t
                 . "user_id =" . $_SESSION["userid"] . ";"
         );
         $dbh->commit();
-    } catch (Exception $e) {
+
+        //検索後の画面から削除した際の対応
+        unset($_SESSION["search_result_tweet"][$_POST["focus_id"]-1]);        
+        } catch (Exception $e) {
         $dbh->rollBack();
     }
+
+
     $uri = $_SERVER['HTTP_REFERER'];
-    header("Location: " . $uri . '#' . $_POST["focus"], true, 303);
+//    header("Location: " . $uri . '#' . $_POST["focus"], true, 303);
+    header("Location: " . $uri , true, 303);    
+    
 }
 
 
@@ -86,11 +93,11 @@ if (!empty($_SESSION["userid"]) && !empty($_POST["tweetid"]) && !empty($_POST["t
         }
 
         $uri = $_SERVER['HTTP_REFERER'];
-        header("Location: " . $uri . '#' . $_POST["focus"], true, 303);
+        header("Location: " . $uri , true, 303);
     }
 
 
-    //削除時
+    //いいね削除時
     if (is_null($result["deleted_at"]) && !is_null($result["id"])) {
         //実行
         try {
@@ -153,7 +160,7 @@ if (!empty($_SESSION["userid"]) && !empty($_POST["tweetid"]) && !empty($_POST["t
         }
 
         $uri = $_SERVER['HTTP_REFERER'];
-        header("Location: " . $uri . '#' . $_POST["focus"], true, 303);
+        header("Location: " . $uri , true, 303);
     } else {
         echo '処理漏れ' . "</br>";
         echo $result["id"] . "</br>";
