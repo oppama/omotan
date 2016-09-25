@@ -95,6 +95,7 @@ if (!empty($_SESSION["userid"]) && !empty($_POST["search_check"]) && !empty($_PO
 
     //結果をセッション変数に格納
     $_SESSION["search_result_tweet"] = $search_result_tweet;
+    
 
 
 //    header("Location: top.php");

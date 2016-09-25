@@ -81,24 +81,28 @@ else {
     <body>
 
         <!-- トップ画：ここから -->
-                <!-- 画像表示 -->
+        <!-- 画像表示 -->
         <div class="top">
             <span id="heading05" align="center"><font size="7">omotan</font></span>
-            
-                <!-- トップへのリンク表示 -->
+
+            <!-- トップへのリンク表示 -->
             <span>
                 <a class="btn_i" type="button" onclick="location.href = 'top.php'"> TOP </a>
             </span>
-               <span style="margin-right: 500px;"></span>
-               
-                <!-- 検索窓表示 -->
-            <span>
-                    <form action="search_logic.php" method="POST" style="display:inline" >
-                    <input type="text" name="search_word" placeholder="検索ワード">
-                    <input type="hidden" name="search_check" value=1>
-                    <input type="submit" value="検索">
-                </form>
-            </span>
+            <span style="margin-right: 500px;"></span>
+
+            <!-- 検索窓表示 -->
+            <?php
+//                if(!empty($_SESSION["userid"])){
+            echo "<span>";
+            echo '<form action="search_logic.php" method="POST" style="display:inline" >';
+            echo '<input type="text" name="search_word" placeholder="検索ワード">';
+            echo '<input type="hidden" name="search_check" value=1>';
+            echo '<input type="submit" value="検索">';
+            echo '</form>';
+            echo '</span>';
+            //               }
+            ?>
 
 
         </div>
