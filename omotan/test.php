@@ -1,3 +1,4 @@
+
 <?php
 // セッション制御
 session_start();
@@ -75,55 +76,55 @@ else {
         <link rel="stylesheet" type="text/css" href="omotan.css">
         <link rel="shortcut icon" href=”favicon.ico”>
 
-        
-<!--タブで分けている箇所  -->
-    <style type="text/css"><!--
-        /* ▼(A)表示領域全体 */
-        div.tabbox { margin: 0px; padding: 0px; width: 400px; }
 
-        /* ▼(B)タブ部分 */
-        p.tabs { margin: 0px; padding: 0px; }
-        p.tabs a {
-            /* ▼(B-2)リンクをタブのように見せる */
-            display: block; width: 5em; float: left;
-            margin: 0px 1px 0px 0px; padding: 3px;
-            text-align: center;
-            border-radius: 12px 12px 0px 0px; /* 角を丸くする */
-            position:relative;
-            left: 15px;
-        }
-        /* ▼(B-3)各タブの配色 */
-        p.tabs a.tab1 { background-color: #008800;  color: white; }
-        p.tabs a.tab2 { background-color: #008800; color:white;}
-        p.tabs a:hover { color: yellow; }
+        <!--タブで分けている箇所  -->
+        <style type="text/css"><!--
+            /* ▼(A)表示領域全体 */
+            div.tabbox { margin: 0px; padding: 0px; width: 400px; }
 
-        /* ▼(C)タブ中身のボックス */
-        div.tab {
-            /* ▼(C-2)ボックス共通の装飾 */
-            height:auto; overflow: auto; clear: left;border-radius: 20px;
-        }
-        /* ▼(C-3)各ボックスの配色 */
-        div#tab1 { border: 2px solid black;}
-        div#tab2 { border: 2px solid black;}
-        div.tab p { margin: 0.5em; }
-        --></style>
- 
-    <script type="text/javascript"><!--
-    function ChangeTab(tabname) {
-            // 全部消す
-            document.getElementById('tab1').style.display = 'none';
-            document.getElementById('tab2').style.display = 'none';
-            // 指定箇所のみ表示
-            document.getElementById(tabname).style.display = 'block';
-        }
-        // --></script>
+            /* ▼(B)タブ部分 */
+            p.tabs { margin: 0px; padding: 0px; }
+            p.tabs a {
+                /* ▼(B-2)リンクをタブのように見せる */
+                display: block; width: 5em; float: left;
+                margin: 0px 1px 0px 0px; padding: 3px;
+                text-align: center;
+                border-radius: 12px 12px 0px 0px; /* 角を丸くする */
+                position:relative;
+                left: 15px;
+            }
+            /* ▼(B-3)各タブの配色 */
+            p.tabs a.tab1 { background-color: #008800;  color: white; }
+            p.tabs a.tab2 { background-color: #008800; color:white;}
+            p.tabs a:hover { color: yellow; }
+
+            /* ▼(C)タブ中身のボックス */
+            div.tab {
+                /* ▼(C-2)ボックス共通の装飾 */
+                height:auto; overflow: auto; clear: left;border-radius: 20px;
+            }
+            /* ▼(C-3)各ボックスの配色 */
+            div#tab1 { border: 2px solid black;}
+            div#tab2 { border: 2px solid black;}
+            div.tab p { margin: 0.5em; }
+            --></style>
+
+        <script type="text/javascript"><!--
+        function ChangeTab(tabname) {
+                // 全部消す
+                document.getElementById('tab1').style.display = 'none';
+                document.getElementById('tab2').style.display = 'none';
+                // 指定箇所のみ表示
+                document.getElementById(tabname).style.display = 'block';
+            }
+            // --></script>
 
 
 
-        
-        
-        
-        
+
+
+
+
     </head>
 
     <body>
@@ -185,192 +186,201 @@ else {
 
 
 
-    <div id="search_result">
-        <div class="tabbox">
-            <p class="tabs">
-                <a href="#tab1" class="tab1" onclick="ChangeTab('tab1'); return false;">omotan</a>
-                <a href="#tab2" class="tab2" onclick="ChangeTab('tab2'); return false;">アカウント</a>
-            </p>               
-            <div id="tab1" class="tab">
-                <?php
-                //タブ1の中身
-                echo "<p>";
+        <div id="search_result">
+            <div class="tabbox">
+                <p class="tabs">
+                    <a href="#tab1" class="tab1" onclick="ChangeTab('tab1'); return false;">omotan</a>
+                    <a href="#tab2" class="tab2" onclick="ChangeTab('tab2'); return false;">アカウント</a>
+                </p>               
+                <div id="tab1" class="tab">
+                    <span style="margin-right: 6px;"></span>
+                    <FONT size="4">omotan検索結果</FONT>
+                    <?php
+                    //タブ1の中身
+                    echo "<p>";
 
 // 新着tweet：ここから
 //表示用に検索結果のtweet_idを抽出する
-                $ids = "";
-                $n=1;
-                foreach ($_SESSION["search_result_tweet"] as $value) {
-                    $ids .= $value["tweet_id"] . ",";
-                    $n++;
-                }
+                    $ids = "";
+                    $n = 1;
+                    foreach ($_SESSION["search_result_tweet"] as $value) {
+                        $ids .= $value["tweet_id"] . ",";
+                        $n++;
+                    }
 
-                $sth = $dbh->prepare("SELECT "
-                        . "tweet_id, user_name,tweet, created_at, user_id, favorite "
-                        . "FROM "
-                        . "tweets "
-                        . "WHERE tweet_id in(" . $ids
-                        . "0) ORDER BY created_at DESC;");
-                $sth->execute();
-                //                   $dataset = $sth->fetch(PDO::FETCH_ASSOC);
+                    $sth = $dbh->prepare("SELECT "
+                            . "tweet_id, user_name,tweet, created_at, user_id, favorite "
+                            . "FROM "
+                            . "tweets "
+                            . "WHERE tweet_id in(" . $ids
+                            . "0) ORDER BY created_at DESC;");
+                    $sth->execute();
+                    //                   $dataset = $sth->fetch(PDO::FETCH_ASSOC);
 //                    print_r($dataset);
 //削除・いいね用の配列を用意
-                $tweetid = array();
-                for($i= 1;$i<=$n;$i++) {
-                    $dataset = $sth->fetch(PDO::FETCH_ASSOC);
-                    $tweetid[$i - 1] = $dataset["tweet_id"];
+                    $tweetid = array();
+                    for ($i = 1; $i <= $n; $i++) {
+                        $dataset = $sth->fetch(PDO::FETCH_ASSOC);
+                        $tweetid[$i - 1] = $dataset["tweet_id"];
 
-                    if (!empty($dataset)) {
-                        //tweet主のリンク先の作成
-                        //画像のリンク                     
+                        if (!empty($dataset)) {
+                            //tweet主のリンク先の作成
+                            //画像のリンク                     
 
-                        echo '<form name=img_tweetuser' . $i . ' action="mypage.php" method="GET" style="display:inline">';
-                        echo '<input type="hidden" name="username" value="' . $dataset["user_name"] . '">';
-                        echo '<a href="mypage.php" >';
-                        echo '<img src="./profile_img/' . $dataset["user_id"] . '.jpg"'
-                        . ' style="width:5%;height:15%;position:relative; left:5px;">';
-                        echo '<span style="margin-right: 15px;"></span>';
-                        echo '</a>';
-                        echo '</form>';
+                            echo '<form name=img_tweetuser' . $i . ' action="mypage.php" method="GET" style="display:inline">';
+                            echo '<input type="hidden" name="username" value="' . $dataset["user_name"] . '">';
+                            echo '<a href="mypage.php" >';
+                            echo '<img src="./profile_img/' . $dataset["user_id"] . '.jpg"'
+                            . ' style="width:5%;height:15%;position:relative; left:5px;">';
+                            echo '<span style="margin-right: 15px;"></span>';
+                            echo '</a>';
+                            echo '</form>';
 
-                        //ユーザー名のリンク                        
-                        echo '<form name=name_tweetuser' . $i . ' action="mypage.php" method="GET" style="display:inline;">';
-                        echo '<input type="hidden" name="username" value="' . $dataset["user_name"] . '">';
-                        echo '<a href="javascript:void(0)" onclick="document.name_tweetuser' . $i . '.submit();" style="text-decoration:none;"><FONT size=2><B>' . $dataset["user_name"] . '</B></FONT></a>';
-                        echo '</form>';
-                        echo '<span style="margin-right: 6px;"></span>';
+                            //ユーザー名のリンク                        
+                            echo '<form name=name_tweetuser' . $i . ' action="mypage.php" method="GET" style="display:inline;">';
+                            echo '<input type="hidden" name="username" value="' . $dataset["user_name"] . '">';
+                            echo '<a href="javascript:void(0)" onclick="document.name_tweetuser' . $i . '.submit();" style="text-decoration:none;"><FONT size=2><B>' . $dataset["user_name"] . '</B></FONT></a>';
+                            echo '</form>';
+                            echo '<span style="margin-right: 6px;"></span>';
 
-                        //投稿日の登録
-                        echo '<span id="time">' . substr($dataset["created_at"], 0, 10) . "</span><br>";
-                        echo '<FONT size=4>' . $dataset["tweet"] . "</FONT></br>";
+                            //投稿日の登録
+                            echo '<span id="time">' . substr($dataset["created_at"], 0, 10) . "</span><br>";
+                            echo '<FONT size=4>' . $dataset["tweet"] . "</FONT></br>";
 
-                        if (!empty($_SESSION["userid"])) {//ログアウトしているユーザーには出さないようにする。
-                            //いいね！
-                            $iine = $dbh->prepare(
-                                    "SELECT count(*) AS fnum FROM favorite"
-                                    . " WHERE user_id = " . $_SESSION["userid"]
-                                    . " and favorite_tweet_id = " . $tweetid[$i - 1]
-                                    . " and deleted_at is null"
-                                    . ";"
-                            );
-                            $iine->execute();
-                            $result = $iine->fetch(PDO::FETCH_ASSOC);
+                            if (!empty($_SESSION["userid"])) {//ログアウトしているユーザーには出さないようにする。
+                                //いいね！
+                                $iine = $dbh->prepare(
+                                        "SELECT count(*) AS fnum FROM favorite"
+                                        . " WHERE user_id = " . $_SESSION["userid"]
+                                        . " and favorite_tweet_id = " . $tweetid[$i - 1]
+                                        . " and deleted_at is null"
+                                        . ";"
+                                );
+                                $iine->execute();
+                                $result = $iine->fetch(PDO::FETCH_ASSOC);
 
-                            if ($result["fnum"] > 0) {
-                                echo '<form name=iine' . $i . ' action="edit.php" method="POST"  style="display:inline;">';
-                                echo '<a id=iine' . $i . '></a>';
-                                echo '<input type="hidden" name="userid" value=' . $_SESSION["userid"] . '>';
-                                echo '<input type="hidden" name="tweetid" value=' . $tweetid[$i - 1] . '>';
-                                echo '<input type="hidden" name="tweet_edit" value="iine">';
-                                echo '<input type="hidden" name="focus" value="iine' . $i . '">'; //実験
-                                echo '<a href="javascript:void(0)" onclick="document.iine' . $i . '.submit(); return false;" style="text-decoration:none;">いいねを取り消す</a>';
-                                echo '&nbsp;&nbsp;';
-                                echo $dataset["favorite"];
-                                echo '&nbsp;&nbsp;&nbsp;';
-                                echo '</form>';
-                            } else {
-                                echo '<form name=iine' . $i . ' action="edit.php" method="POST"  style="display:inline;">';
-                                echo '<a id=iine' . $i . '></a>';
-                                echo '<input type="hidden" name="userid" value=' . $_SESSION["userid"] . '>';
-                                echo '<input type="hidden" name="tweetid" value=' . $tweetid[$i - 1] . '>';
-                                echo '<input type="hidden" name="tweet_edit" value="iine">';
-                                echo '<input type="hidden" name="focus" value="iine' . $i . '">'; //実験
-                                echo '<a href="javascript:void(0)" onclick="document.iine' . $i . '.submit(); return false;" style="text-decoration:none;">いいね</a>';
-                                echo '&nbsp;&nbsp;';
-                                echo $dataset["favorite"];
-                                echo '&nbsp;&nbsp;&nbsp;';
-                                echo '</form>';
-                            }
+                                if ($result["fnum"] > 0) {
+                                    echo '<form name=iine' . $i . ' action="edit.php" method="POST"  style="display:inline;">';
+                                    echo '<a id=iine' . $i . '></a>';
+                                    echo '<input type="hidden" name="userid" value=' . $_SESSION["userid"] . '>';
+                                    echo '<input type="hidden" name="tweetid" value=' . $tweetid[$i - 1] . '>';
+                                    echo '<input type="hidden" name="tweet_edit" value="iine">';
+                                    echo '<input type="hidden" name="focus" value="iine' . $i . '">'; //実験
+                                    echo '<a href="javascript:void(0)" onclick="document.iine' . $i . '.submit(); return false;" style="text-decoration:none;">いいねを取り消す</a>';
+                                    echo '&nbsp;&nbsp;';
+                                    echo $dataset["favorite"];
+                                    echo '&nbsp;&nbsp;&nbsp;';
+                                    echo '</form>';
+                                } else {
+                                    echo '<form name=iine' . $i . ' action="edit.php" method="POST"  style="display:inline;">';
+                                    echo '<a id=iine' . $i . '></a>';
+                                    echo '<input type="hidden" name="userid" value=' . $_SESSION["userid"] . '>';
+                                    echo '<input type="hidden" name="tweetid" value=' . $tweetid[$i - 1] . '>';
+                                    echo '<input type="hidden" name="tweet_edit" value="iine">';
+                                    echo '<input type="hidden" name="focus" value="iine' . $i . '">'; //実験
+                                    echo '<a href="javascript:void(0)" onclick="document.iine' . $i . '.submit(); return false;" style="text-decoration:none;">いいね</a>';
+                                    echo '&nbsp;&nbsp;';
+                                    echo $dataset["favorite"];
+                                    echo '&nbsp;&nbsp;&nbsp;';
+                                    echo '</form>';
+                                }
 
 //つぶやき主のみ削除ボタンを表示
-                            if ($_SESSION["userid"] == $dataset["user_id"]) {
-                                echo '<form name=del' . $i . ' action="edit.php" method="POST" onSubmit="return check()"  style="display:inline;">';
-                                echo '<a id=del' . $i . '></a>';
-                                echo '<input type="hidden" name="userid" value=' . $_SESSION["userid"] . '>';
-                                echo '<input type="hidden" name="tweetid" value=' . $tweetid[$i - 1] . '>';
-                                echo '<input type="hidden" name="tweet_edit" value="del">';
-                                echo '<input type="hidden" name="focus" value="del' . $i . '">'; //実験
-                                echo '<a href="javascript:void(0)" onclick="document.del' . $i . '.submit();" style="text-decoration:none;">削除する</a>';
-                                echo '&nbsp;&nbsp;&nbsp;';
-                                echo '</form>';
+                                if ($_SESSION["userid"] == $dataset["user_id"]) {
+                                    echo '<form name=del' . $i . ' action="edit.php" method="POST" onSubmit="return check()"  style="display:inline;">';
+                                    echo '<a id=del' . $i . '></a>';
+                                    echo '<input type="hidden" name="userid" value=' . $_SESSION["userid"] . '>';
+                                    echo '<input type="hidden" name="tweetid" value=' . $tweetid[$i - 1] . '>';
+                                    echo '<input type="hidden" name="tweet_edit" value="del">';
+                                    echo '<input type="hidden" name="focus" value="del' . $i . '">'; //実験
+                                    echo '<a href="javascript:void(0)" onclick="document.del' . $i . '.submit();" style="text-decoration:none;">削除する</a>';
+                                    echo '&nbsp;&nbsp;&nbsp;';
+                                    echo '</form>';
+                                }
                             }
+                            echo '<hr size="3" align="left" color="#EEEEEE">';
+                        } else {
+                            
                         }
-                        echo '<hr size="3" align="left" color="#EEEEEE">';
-                    } else {
-                        
                     }
-                }
 
 //新着tweet：ここまで
-                //タブ1ここまで
-                echo "</p>";
-                ?>
-            </div>
-            <div id="tab2" class="tab">
+                    //タブ1ここまで
+                    echo "</p>";
+                    ?>
+                </div>
+                <div id="tab2" class="tab">
+                    <span style="margin-right: 6px;"></span>
+                    <FONT size="4">アカウント検索結果</FONT>
+
                     <?php
-                //タブ2の中身
-                echo "<p>";
+                    //タブ2の中身
+                    echo "<p>";
 
 // 新着tweet：ここから
 //表示用に検索結果のtweet_idを抽出する
-                $ids = "";
-                $n=1;
-                foreach ($_SESSION["search_result_tweet"] as $value) {
-                    $ids .= $value["tweet_id"] . ",";
-                    $n++;
-                }
+                    $ids = "";
+                    $n = 1;
+                    foreach ($_SESSION["search_result_tweet"] as $value) {
+                        $ids .= $value["tweet_id"] . ",";
+                        $n++;
+                    }
 
-                $sth = $dbh->prepare("SELECT "
-                        . "tweet_id, user_name,tweet, created_at, user_id, favorite "
-                        . "FROM "
-                        . "tweets "
-                        . "WHERE tweet_id in(" . $ids
-                        . "0) ORDER BY created_at DESC;");
-                $sth->execute();
-                //                   $dataset = $sth->fetch(PDO::FETCH_ASSOC);
+                    $sth = $dbh->prepare("SELECT "
+                            . "tweet_id, user_name,tweet, created_at, user_id, favorite "
+                            . "FROM "
+                            . "tweets "
+                            . "WHERE tweet_id in(" . $ids
+                            . "0) ORDER BY created_at DESC;");
+                    $sth->execute();
+                    //                   $dataset = $sth->fetch(PDO::FETCH_ASSOC);
 //                    print_r($dataset);
 //削除・いいね用の配列を用意
-                $tweetid = array();
-                for($i= 1;$i<=$n;$i++) {
-                    $dataset = $sth->fetch(PDO::FETCH_ASSOC);
-                    $tweetid[$i - 1] = $dataset["tweet_id"];
+                    $tweetid = array();
+                    for ($i = 1; $i <= $n; $i++) {
+                        $dataset = $sth->fetch(PDO::FETCH_ASSOC);
+                        $tweetid[$i - 1] = $dataset["tweet_id"];
 
-                    if (!empty($dataset)) {
-                        //tweet主のリンク先の作成
-                        //画像のリンク                     
+                        if (!empty($dataset)) {
+                            //tweet主のリンク先の作成
+                            //画像のリンク                     
 
-                        echo '<form name=img_tweetuser' . $i . ' action="mypage.php" method="GET" style="display:inline">';
-                        echo '<input type="hidden" name="username" value="' . $dataset["user_name"] . '">';
-                        echo '<a href="mypage.php" >';
-                        echo '<img src="./profile_img/' . $dataset["user_id"] . '.jpg"'
-                        . ' style="width:5%;height:15%;position:relative; left:5px;">';
-                        echo '<span style="margin-right: 15px;"></span>';
-                        echo '</a>';
-                        echo '</form>';
+                            echo '<form name=img_tweetuser' . $i . ' action="mypage.php" method="GET" style="display:inline">';
+                            echo '<input type="hidden" name="username" value="' . $dataset["user_name"] . '">';
+                            echo '<a href="mypage.php" >';
+                            echo '<img src="./profile_img/' . $dataset["user_id"] . '.jpg"'
+                            . ' style="width:5%;height:15%;position:relative; left:5px;">';
+                            echo '<span style="margin-right: 15px;"></span>';
+                            echo '</a>';
+                            echo '</form>';
 
-                        //ユーザー名のリンク                        
-                        echo '<form name=name_tweetuser' . $i . ' action="mypage.php" method="GET" style="display:inline;">';
-                        echo '<input type="hidden" name="username" value="' . $dataset["user_name"] . '">';
-                        echo '<a href="javascript:void(0)" onclick="document.name_tweetuser' . $i . '.submit();" style="text-decoration:none;"><FONT size=2><B>' . $dataset["user_name"] . '</B></FONT></a>';
-                        echo '</form>';
-                        echo '<span style="margin-right: 6px;"></span>';
-
-                      } else {
-                        
+                            //ユーザー名のリンク                        
+                            echo '<form name=name_tweetuser' . $i . ' action="mypage.php" method="GET" style="display:inline;">';
+                            echo '<input type="hidden" name="username" value="' . $dataset["user_name"] . '">';
+                            echo '<a href="javascript:void(0)" onclick="document.name_tweetuser' . $i . '.submit();" style="text-decoration:none;"><FONT size=2><B>' . $dataset["user_name"] . '</B></FONT></a>';
+                            echo '</form>';
+                            echo '<span style="margin-right: 6px;"></span>';
+                        } else {
+                            
+                        }
                     }
-                }
 
 //新着tweet：ここまで
-                //タブ2ここまで
-                echo "</p>";
-                ?>
+                    //タブ2ここまで
+                    echo "</p>";
+                    ?>
+                </div>
             </div>
         </div>
-    </div>
-    <script type="text/javascript"><!--
-       // デフォルトのタブを選択
-        ChangeTab('tab1');
-        // --></script>
+        <script type="text/javascript"><!--
+           // デフォルトのタブを選択
+            ChangeTab('tab1');
+            // --></script>
 
-</body>
+
+
+    </body>
 </html>
+
+
+

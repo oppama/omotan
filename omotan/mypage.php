@@ -2,9 +2,12 @@
 // セッション制御
 session_start();
 
+
+//エラー詳細表示
+//ini_set("display_errors", 1);
+//error_reporting(E_ALL);
 //パス情報読み込み
 require 'secret/secret.php';
-
 
 $dbh = new PDO('mysql:host=localhost;dbname=omotan', $user
         , $password, array(PDO::ATTR_PERSISTENT => true));
@@ -15,8 +18,6 @@ if ($_GET["mode"] == "logout") {
     $_SESSION = array();
     session_destroy();
 }
-
-
 // ログイン中または未ログイン
 else {
 
@@ -27,8 +28,6 @@ else {
 
         $result = $sth->fetch(PDO::FETCH_ASSOC);
         $_SESSION["username"] = $result["user_name"];
-    } else {
-        header("Location: omotan_top.php");
     }
 }
 ?>
@@ -36,6 +35,7 @@ else {
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="ja">
     <head>
+        <!--	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> -->
         <meta http-equiv="Content-Style-Type" content="text/css">
         <title>omotan</title>
 
@@ -54,161 +54,244 @@ else {
                 }
             }
 
-
         </script>
 
+
+
+        <script Language="text/javascript">
+            <!--  //文字をformのsubmitリンクにする。
+        function send()
+            {
+                test1.submit();
+            }
+        </script>
+
+        <style type="text/css">
+            <!--
+            a:link { color :black; }
+            a:visited { color :black; }
+            -->
+        </style>
         <link rel="stylesheet" type="text/css" href="omotan.css">
+        <link rel="shortcut icon" href=”favicon.ico”>
+
 
     </head>
 
     <body>
-        <!-- トップ画の上の部分 ここから-->            
 
-    <input type="button" onclick="location.href = 'omotan_top.php'"value="TOP">
-    <input type="button" onclick="location.href = ' '"value="通知">                            
-    <input type="button" onclick="location.href = ' '"value="メッセージ">           
+        <!-- トップ画：ここから -->
+        <!-- 画像表示 -->
+        <div class="top">
+            <span id="heading05" align="center"><font size="7">omotan</font></span>
+
+            <!-- トップへのリンク表示 -->
+            <span>
+                <a class="btn_i" type="button" onclick="location.href = 'top.php'"> TOP </a>
+            </span>
+            <span style="margin-right: 500px;"></span>
+
+            <!-- 検索窓表示 -->
+            <?php
+//                if(!empty($_SESSION["userid"])){
+            echo "<span>";
+            echo '<form action="search_logic.php" method="POST" style="display:inline" >';
+            echo '<input type="text" name="search_word" placeholder="検索ワード">';
+            echo '<input type="hidden" name="search_check" value=1>';
+            echo '<input type="submit" value="検索">';
+            echo '</form>';
+            echo '</span>';
+            //               }
+            ?>
+
+
+        </div>
+        <!-- トップ画：ここまで -->
+        <div id="margin"></div>
+
+        <div id="login"><!-- ログインフォーム：ここから -->
 
 
 
-
-
-
-
-
-
-    <!-- トップ画の上の部分 ここまで-->            
-
-    <!-- トップ画：ここから -->
-    <div>
-        <img src="omotan.png" align="middle">
-    </div>
-    <!-- トップ画：ここまで -->
-
-    </br>
-    <div id="news"><!-- ログインフォーム：ここから -->
-
-
-
-        <?php
+            <?php
 // --- ログインフォーム --------------------
+            if (empty($_SESSION["userid"])) {
 
-        echo '<div>';
-        echo $_SESSION["username"] . 'さん <br><br>';
-        echo '<a href="omotan_top.php?mode=logout">ログアウト</a>';
-        echo '</div>';
-        ?>
+                echo '<div>';
+                echo '<form action="login.php" method="POST">';
+                echo 'ログイン名 <input type="text" name="username" size="8"><br>';
+                echo 'パスワード <input type="password" name="password" size="8"><br>';
+                echo '<input type="hidden" name="mode" value="login">';
+                echo '<input type="submit" value="ログイン">';
+                echo '</form>';
+                echo '</div>';
+            } else {
+                echo '<div>';
 
-    </div><!-- ログインフォーム：ここまで -->
+                //自画像表示作業用
+                /*                $image_path = './profile_img/' . $_SESSION["userid"] . ".jpg";
+                  if (file_exists($image_path)) {
+                  $fp = fopen($image_path, 'rb');
+                  $size = filesize($image_path);
+                  $img = fread($fp, $size);
+                  fclose($fp);
+                  header('Content-Type: image/jpeg');
+                  echo $img;
+                  } */
+
+                echo '<img src="./profile_img/' . $_SESSION["userid"] . '.jpg"'
+                . ' style="width:10%;height:auto;"></img>';
+                echo '<span style="margin-right: 15px;"></span>';
+
+                echo $_SESSION["username"] . '<br><br>';
+                //マイページ
+
+                echo '<form name=mypage action="mypage.php" method="GET" style="display:inline;">';
+                echo '<input type="hidden" name="username" value="' . $_SESSION["username"] . '">';
+                echo '<a href="javascript:void(0)" onclick="document.mypage.submit();">マイページ</a>';
+                echo '</form>';
+                echo '</br>';
+
+                //ログアウト
+                echo '<a href="top.php?mode=logout">ログアウト</a>';
+                echo '</div>';
+            }
+            ?>
+
+
+        </div><!-- ログインフォーム：ここまで -->
 
 
 
-    <div id="products">
+        <div id="products">
 
 
-        <?php
+            <?php
 //つぶやき画面表示 ここから
 
-        echo '<div>';
-        echo '<form action="omotan_add.php" method="POST">';
-        echo 'omotan <input type="text" name="tweet" placeholder="例:ピスタチオ"><br>';
-        echo '<input type="hidden" name="add_check" value=1>';
-        echo '<input type="submit" value="つぶやく">';
-        echo '</form>';
-
-        echo '<hr align="left">';
-//つぶやき画面表示 ここまで                        
-// 新着tweet：ここから
-        $dbh = new PDO('mysql:host=localhost;dbname=omotan', $user
-                , $password, array(PDO::ATTR_PERSISTENT => true));
-        $sth = $dbh->prepare("SELECT "
-                . "tweet_id, user_name,tweet, created_at, user_id, favorite "
-                . "FROM "
-                . "tweets "
-                . "where user_id = " . $_SESSION["userid"]
-                . " ORDER BY created_at DESC LIMIT 10");
-        $sth->execute();
-
-        for ($i = 1; $i <= 10; $i++) {
-            $dataset = $sth->fetch(PDO::FETCH_ASSOC);
-            $tweetid[$i - 1] = $dataset["tweet_id"];
-
-            if (!empty($dataset)) {
-                //tweet主のリンク先の作成
-
-                echo '<form name=tweetuser' . $i . ' action="omotan_mypage.php" method="GET" style="display:inline;">';
-                echo '<input type="hidden" name="username" value="' . $dataset["user_name"] . '">';
-                echo '<a href="javascript:void(0)" onclick="document.tweetuser' . $i . '.submit();">' . $dataset["user_name"] . '</a>';
-                echo '</form>';
-
-
-
-
-                echo $dataset["created_at"] . '<br>';
-                echo 'omotan ' . $dataset["tweet"] . "</br>";
-                //つぶやき主のみ削除ボタンを表示
-                //いいね！
-                $iine = $dbh->prepare(
-                        "SELECT count(*) AS fnum FROM favorite"
-                        . " WHERE user_id = " . $_SESSION["userid"]
-                        . " and favorite_tweet_id = " . $tweetid[$i - 1]
-                        . " and deleted_at is null"
-                        . ";"
-                );
-                $iine->execute();
-                $result = $iine->fetch(PDO::FETCH_ASSOC);
-
-                if ($result["fnum"] > 0) {
-                    echo '<form name=iine' . $i . ' action="omotan_edit.php" method="POST"  style="display:inline;">';
-                    echo '<a id=iine' . $i . '></a>';
-                    echo '<input type="hidden" name="userid" value=' . $_SESSION["userid"] . '>';
-                    echo '<input type="hidden" name="tweetid" value=' . $tweetid[$i - 1] . '>';
-                    echo '<input type="hidden" name="tweet_edit" value="iine">';
-                    echo '<input type="hidden" name="focus" value="iine' . $i . '">'; //実験
-                    echo '<a href="javascript:void(0)" onclick="document.iine' . $i . '.submit(); return false;">いいねを取り消す</a>';
-                    echo '&nbsp;&nbsp;';
-                    echo $dataset["favorite"];
-                    echo '&nbsp;&nbsp;&nbsp;';
-                    echo '</form>';
-                } else {
-                    echo '<form name=iine' . $i . ' action="omotan_edit.php" method="POST"  style="display:inline;">';
-                    echo '<a id=iine' . $i . '></a>';
-                    echo '<input type="hidden" name="userid" value=' . $_SESSION["userid"] . '>';
-                    echo '<input type="hidden" name="tweetid" value=' . $tweetid[$i - 1] . '>';
-                    echo '<input type="hidden" name="tweet_edit" value="iine">';
-                    echo '<input type="hidden" name="focus" value="iine' . $i . '">'; //実験
-                    echo '<a href="javascript:void(0)" onclick="document.iine' . $i . '.submit(); return false;">いいね</a>';
-                    echo '&nbsp;&nbsp;';
-                    echo $dataset["favorite"];
-                    echo '&nbsp;&nbsp;&nbsp;';
-                    echo '</form>';
-                }
-                if ($_SESSION["userid"] == $dataset["user_id"]) {
-
-
-                    //削除
-                    echo '<form name=del' . $i . ' action="omotan_edit.php" method="POST" onSubmit="return check()"  style="display:inline;">';
-                    echo '<a id=del' . $i . '></a>';
-                    echo '<input type="hidden" name="userid" value=' . $_SESSION["userid"] . '>';
-                    echo '<input type="hidden" name="tweetid" value=' . $tweetid[$i - 1] . '>';
-                    echo '<input type="hidden" name="tweet_edit" value="del">';
-                    echo '<input type="hidden" name="focus" value="del' . $i . '">'; //実験
-                    echo '<a href="javascript:void(0)" onclick="document.del' . $i . '.submit();">削除する</a>';
-                    echo '&nbsp;&nbsp;&nbsp;';
-                    echo '</form>';
-                }
-
-
-
-
-
-                echo '<hr width="400" size="3" style="border-style:dotted" align="left">';
-            } else {
+            if (empty($_SESSION["userid"])) {
                 
+            } else {
+                echo '<div class="tweet">';
+                echo '<form action="add.php" method="POST">';
+                echo '<input type="text" name="tweet" placeholder="例:ピスタチオ"><br>';
+                echo '<input type="hidden" name="add_check" value=1>';
+                echo '<input type="submit" value="omotan">';
+                echo '</form>';
+                echo '</div>';
+                echo '<section id="line01"><hr /></section>';
             }
-        }
-//新着tweet：ここまで
-        ?>
 
-    </div>
-</body>
+//つぶやき画面表示 ここまで
+// 新着tweet：ここから
+//表示件数用の変数
+            $h = 10;
+            $dbh = new PDO('mysql:host=localhost;dbname=omotan', $user
+                    , $password, array(PDO::ATTR_PERSISTENT => true));
+
+            $sth = $dbh->prepare("SELECT "
+                    . "tweet_id, user_name,tweet, created_at, user_id, favorite "
+                    . "FROM "
+                    . "tweets "
+                    . 'WHERE user_name like"' . $_GET["username"] . '"'
+                    . " ORDER BY created_at DESC LIMIT " . $h . ";");
+            $sth->execute();
+
+//削除・いいね用の配列を用意
+            $tweetid = array();
+
+            for ($i = 1; $i <= $h; $i++) {
+                $dataset = $sth->fetch(PDO::FETCH_ASSOC);
+                $tweetid[$i - 1] = $dataset["tweet_id"];
+
+                if (!empty($dataset)) {
+                    //tweet主のリンク先の作成
+                    //画像のリンク                        
+
+                    echo '<form name=img_tweetuser' . $i . ' action="mypage.php" method="GET" style="display:inline">';
+                    echo '<input type="hidden" name="username" value="' . $dataset["user_name"] . '">';
+//                        echo '<a href="javascript:void(0)" onclick="document.img_tweetuser' . $i . '.submit();" style="text-decoration:none;"><FONT size=2><B>' . $dataset["user_name"] . '</B></FONT></a>';                        
+                    echo '<a href="mypage.php" >';
+                    echo '<img src="./profile_img/' . $dataset["user_id"] . '.jpg"'
+                    . ' style="width:5%;height:5%;">';
+                    echo '<span style="margin-right: 15px;"></span>';
+                    echo '</a>';
+                    echo '</form>';
+//        echo '<span style="margin-right: 6px;"></span>';
+                    //ユーザー名のリンク                        
+                    echo '<form name=name_tweetuser' . $i . ' action="mypage.php" method="GET" style="display:inline;">';
+                    echo '<input type="hidden" name="username" value="' . $dataset["user_name"] . '">';
+                    echo '<a href="javascript:void(0)" onclick="document.name_tweetuser' . $i . '.submit();" style="text-decoration:none;"><FONT size=2><B>' . $dataset["user_name"] . '</B></FONT></a>';
+                    echo '</form>';
+                    echo '<span style="margin-right: 6px;"></span>';
+
+                    //投稿日の登録
+                    echo '<span id="time">' . substr($dataset["created_at"], 0, 10) . "</span><br>";
+                    echo '<FONT size=4>' . $dataset["tweet"] . "</FONT></br>";
+
+                    if (!empty($_SESSION["userid"])) {//ログアウトしているユーザーには出さないようにする。
+                        //いいね！
+                        $iine = $dbh->prepare(
+                                "SELECT count(*) AS fnum FROM favorite"
+                                . " WHERE user_id = " . $_SESSION["userid"]
+                                . " and favorite_tweet_id = " . $tweetid[$i - 1]
+                                . " and deleted_at is null"
+                                . ";"
+                        );
+                        $iine->execute();
+                        $result = $iine->fetch(PDO::FETCH_ASSOC);
+
+                        if ($result["fnum"] > 0) {
+                            echo '<form name=iine' . $i . ' action="edit.php" method="POST"  style="display:inline;">';
+                            echo '<a id=iine' . $i . '></a>';
+                            echo '<input type="hidden" name="userid" value=' . $_SESSION["userid"] . '>';
+                            echo '<input type="hidden" name="tweetid" value=' . $tweetid[$i - 1] . '>';
+                            echo '<input type="hidden" name="tweet_edit" value="iine">';
+                            echo '<input type="hidden" name="focus" value="iine' . $i . '">'; //実験
+                            echo '<a href="javascript:void(0)" onclick="document.iine' . $i . '.submit(); return false;" style="text-decoration:none;">いいねを取り消す</a>';
+                            echo '&nbsp;&nbsp;';
+                            echo $dataset["favorite"];
+                            echo '&nbsp;&nbsp;&nbsp;';
+                            echo '</form>';
+                        } else {
+                            echo '<form name=iine' . $i . ' action="edit.php" method="POST"  style="display:inline;">';
+                            echo '<a id=iine' . $i . '></a>';
+                            echo '<input type="hidden" name="userid" value=' . $_SESSION["userid"] . '>';
+                            echo '<input type="hidden" name="tweetid" value=' . $tweetid[$i - 1] . '>';
+                            echo '<input type="hidden" name="tweet_edit" value="iine">';
+                            echo '<input type="hidden" name="focus" value="iine' . $i . '">'; //実験
+                            echo '<a href="javascript:void(0)" onclick="document.iine' . $i . '.submit(); return false;" style="text-decoration:none;">いいね</a>';
+                            echo '&nbsp;&nbsp;';
+                            echo $dataset["favorite"];
+                            echo '&nbsp;&nbsp;&nbsp;';
+                            echo '</form>';
+                        }
+
+//つぶやき主のみ削除ボタンを表示
+                        if ($_SESSION["userid"] == $dataset["user_id"]) {
+                            echo '<form name=del' . $i . ' action="edit.php" method="POST" onSubmit="return check()"  style="display:inline;">';
+                            echo '<a id=del' . $i . '></a>';
+                            echo '<input type="hidden" name="userid" value=' . $_SESSION["userid"] . '>';
+                            echo '<input type="hidden" name="tweetid" value=' . $tweetid[$i - 1] . '>';
+                            echo '<input type="hidden" name="tweet_edit" value="del">';
+                            echo '<input type="hidden" name="focus" value="del' . $i . '">'; //実験
+                            echo '<a href="javascript:void(0)" onclick="document.del' . $i . '.submit();" style="text-decoration:none;">削除する</a>';
+                            echo '&nbsp;&nbsp;&nbsp;';
+                            echo '</form>';
+                        }
+                    }
+                    echo '<hr size="3" align="left" color="#EEEEEE">';
+                } else {
+                    
+                }
+            }
+
+//新着tweet：ここまで
+            ?>
+
+            
+           
+            
+        </div>
+    </body>
 </html>
